@@ -1,0 +1,2 @@
+# PrivateBot
+Simple music discord
