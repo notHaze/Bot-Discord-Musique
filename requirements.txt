@@ -6,6 +6,7 @@ chardet==4.0.0
 discord.py==1.7.3
 ffmpeg==1.4
 ffmpeg-python==0.2.0
+ffmpeg-static==4.2.7
 future==0.18.2
 idna==3.3
 multidict==5.2.0
@@ -15,4 +16,5 @@ python-dotenv==0.19.2
 six==1.16.0
 typing_extensions==4.0.1
 yarl==1.7.2
-youtube-dl==2021.06.06                                          
+youtube-dl==2021.06.06   
+opussscirpt==0.0.7                                       
