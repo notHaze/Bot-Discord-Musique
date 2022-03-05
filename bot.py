@@ -338,8 +338,8 @@ class Music(commands.Cog):
         player = self.get_player(ctx)
         temp_song=[]
         for i in range (player.queue.qsize()):
-            temp_song.append(player.queue.get()
-        temp_song.pop(index)
+            temp_song.append(player.queue.get())
+        del temp_song[index]
         for i in temp_song:
             player.queue.put(i)
         await ctx.send(f'**`{ctx.author}`**: Removed a song!')
