@@ -301,7 +301,7 @@ class Music(commands.Cog):
             
         # If download is False, source will be a dict which will be used later to regather the stream.
         # If download is True, source will be a discord.FFmpegPCMAudio with a VolumeTransformer.
-        source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop, download=False, fromloop=False, player)
+        source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop, download=False, fromloop=False, player=player)
 
         await player.queue.put(source)
         if loop == True:
@@ -309,8 +309,8 @@ class Music(commands.Cog):
             a=0
             loop_queue=[]
             for song in listtitle:
-                loop_queue.append(await YTDLSource.create_source(ctx, song, loop=self.bot.loop, download=False, fromloop=True, player))
-            loop_queue.insert(0,await YTDLSource.create_source(ctx, vc.source.title, loop=self.bot.loop, download=False, fromloop=True, player))
+                loop_queue.append(await YTDLSource.create_source(ctx, song, loop=self.bot.loop, download=False, fromloop=True, player=player))
+            loop_queue.insert(0,await YTDLSource.create_source(ctx, vc.source.title, loop=self.bot.loop, download=False, fromloop=True, player=player))
             
     @commands.command(name='pause')
     async def pause_(self, ctx):
@@ -411,8 +411,8 @@ class Music(commands.Cog):
             a=0
             loop_queue=[]
             for song in listtitle:
-                loop_queue.append(await YTDLSource.create_source(ctx, song, loop=self.bot.loop, download=False, fromloop=True, player))
-            loop_queue.insert(0,await YTDLSource.create_source(ctx, vc.source.title, loop=self.bot.loop, download=False, fromloop=True, player))
+                loop_queue.append(await YTDLSource.create_source(ctx, song, loop=self.bot.loop, download=False, fromloop=True, player=player))
+            loop_queue.insert(0,await YTDLSource.create_source(ctx, vc.source.title, loop=self.bot.loop, download=False, fromloop=True, player=player))
         else:
             loop=False
             await ctx.send(f'**`{ctx.author}`**: Unlooped the queue!')
