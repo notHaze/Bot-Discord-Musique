@@ -98,7 +98,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
         if 'entries' in data:
             for index in range(1,len(data['entries'])):
-                playlist_entries(data['entries'][i], player)
+                await playlist_entries(data['entries'][i], player)
             data = data['entries'][0]
 
         if fromloop == False:
