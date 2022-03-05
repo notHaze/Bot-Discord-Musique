@@ -123,9 +123,9 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
         return cls(discord.FFmpegPCMAudio(data['url']), data=data, requester=requester)
         
-    async def playlist_entries(self, data, player):
+    def playlist_entries(self, data, player):
         source={'webpage_url': data['webpage_url'], 'requester': ctx.author, 'title': data['title']}
-        await player.queue.put(source)
+        player.queue.put(source)
         
         
 
