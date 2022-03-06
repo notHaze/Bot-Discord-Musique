@@ -102,9 +102,9 @@ class YTDLSource(discord.PCMVolumeTransformer):
         data = await loop.run_in_executor(None, to_run)
 
         if 'entries' in data:
-            for index in range(1,len(data['entries'])):
-                await playlist_entries(data['entries'][i], player)
-            data = data['entries'][0]
+            for index in range(0,len(data['entries'])-1):
+                await playlist_entries(data['entries'][index], player)
+            data = data['entries'][len(data['entries'])]
 
         if fromloop == False:
             await ctx.send(f'```ini\n[Added {data["title"]} to the Queue.]\n```')
