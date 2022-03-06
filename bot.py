@@ -346,13 +346,13 @@ class Music(commands.Cog):
         player = self.get_player(ctx)
         temp_song=[]
         for i in range (player.queue.qsize()):
-            temp_song.append(player.queue.get())
+            await temp_song.append(player.queue.get())
         if index <1 or index>player.queue.qsize():
             return await ctx.send('Uncorrect song number')
 
         del temp_song[index-1]
         for i in temp_song:
-            player.queue.put(i)
+            await player.queue.put(i)
         await ctx.send(f'**`{ctx.author}`**: Removed a song!')
 
     @commands.command(name='resume', aliases=['unpause'])
