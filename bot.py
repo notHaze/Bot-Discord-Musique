@@ -41,9 +41,7 @@ async def change_prefix(ctx, new_prefix: str):
         embed = discord.Embed(title='Erreur', description=f'Le prefix {new_prefix} non valide, 1 seul caractere autorisé')
         await ctx.send(embed=embed)
         
-async def playlist_entries(data, player):
-    source={'webpage_url': data['webpage_url'], 'requester': ctx.author, 'title': data['title']}
-    await player.queue.put(source)
+
     
 ytdlopts = {
     'format': 'bestaudio/best',
@@ -93,7 +91,12 @@ class YTDLSource(discord.PCMVolumeTransformer):
         This is only useful when you are NOT downloading.
         """
         return self.__getattribute__(item)
-
+        
+    @classmethod
+    async def playlist_entries(cls, ctx, data, player):
+        source={'webpage_url': data['webpage_url'], 'requester': ctx.author, 'title': data['title']}
+        await player.queue.put(source)
+        
     @classmethod
     async def create_source(cls, ctx, search: str, *, loop, download=False, fromloop, player):
         loop = loop or asyncio.get_event_loop()
@@ -103,7 +106,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
         if 'entries' in data:
             for index in range(0,len(data['entries'])-1):
-                await playlist_entries(data['entries'][index], player)
+                await YTDLSource.playlist_entries(ctx, data['entries'][index], player)
             data = data['entries'][len(data['entries'])]
 
         if fromloop == False:
@@ -127,7 +130,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
         data = await loop.run_in_executor(None, to_run)
 
         return cls(discord.FFmpegPCMAudio(data['url']), data=data, requester=requester)
-        
+     
 
         
         
