@@ -41,7 +41,7 @@ async def change_prefix(ctx, new_prefix: str):
         embed = discord.Embed(title='Erreur', description=f'Le prefix {new_prefix} non valide, 1 seul caractere autorisé')
         await ctx.send(embed=embed)
         
-async def playlist_entries(self, data, player):
+async def playlist_entries(data, player):
     source={'webpage_url': data['webpage_url'], 'requester': ctx.author, 'title': data['title']}
     await player.queue.put(source)
     
