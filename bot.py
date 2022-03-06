@@ -346,7 +346,7 @@ class Music(commands.Cog):
         player = self.get_player(ctx)
         temp_song=[]
         for i in range (player.queue.qsize()):
-            await temp_song.append(player.queue.get())
+            temp_song.append(await player.queue.get())
         if index <1 or index>player.queue.qsize():
             return await ctx.send('Uncorrect song number')
 
