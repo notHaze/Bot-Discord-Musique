@@ -96,6 +96,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
     async def playlist_entries(cls, ctx, data, player):
         source={'webpage_url': data['webpage_url'], 'requester': ctx.author, 'title': data['title']}
         await player.queue.put(source)
+        await ctx.send(f'```ini\n[Added {data["title"]} to the Queue.]\n```')
         
     @classmethod
     async def create_source(cls, ctx, search: str, *, loop, download=False, fromloop, player):
@@ -333,7 +334,7 @@ class Music(commands.Cog):
         await ctx.send(f'**`{ctx.author}`**: Paused the song!')
         
     @commands.command(name='remove', aliases=['rm'])
-    async def remove_(self, ctx, index):
+    async def remove_(self, ctx, index: int):
         """remove the ieme song."""
         vc = ctx.voice_client
 
@@ -346,7 +347,10 @@ class Music(commands.Cog):
         temp_song=[]
         for i in range (player.queue.qsize()):
             temp_song.append(player.queue.get())
-        del temp_song[index]
+        if index <1 or index>player.queue.qsize():
+            return await ctx.send('Uncorrect song number')
+
+        del temp_song[index-1]
         for i in temp_song:
             player.queue.put(i)
         await ctx.send(f'**`{ctx.author}`**: Removed a song!')
