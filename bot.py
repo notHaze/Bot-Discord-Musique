@@ -40,6 +40,11 @@ async def change_prefix(ctx, new_prefix: str):
     else:
         embed = discord.Embed(title='Erreur', description=f'Le prefix {new_prefix} non valide, 1 seul caractere autorisé')
         await ctx.send(embed=embed)
+        
+async def playlist_entries(self, data, player):
+    source={'webpage_url': data['webpage_url'], 'requester': ctx.author, 'title': data['title']}
+    await player.queue.put(source)
+    
 ytdlopts = {
     'format': 'bestaudio/best',
     'outtmpl': 'downloads/%(extractor)s-%(id)s-%(title)s.%(ext)s',
@@ -123,9 +128,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
         return cls(discord.FFmpegPCMAudio(data['url']), data=data, requester=requester)
         
-async def playlist_entries(self, data, player):
-    source={'webpage_url': data['webpage_url'], 'requester': ctx.author, 'title': data['title']}
-    await player.queue.put(source)
+
         
         
 
