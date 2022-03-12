@@ -343,16 +343,14 @@ class Music(commands.Cog):
 
         if not vc or not vc.is_playing():
             return await ctx.send('I am not currently playing anything!')
-        player = self.get_player(ctx)
-        source = player.current
-        print(source)
-        video_id=source.get('webpage_url').strip("https://www.youtube.com/watch?v=")
+
+        video_id=vc.source.web_url.strip("https://www.youtube.com/watch?v=")
         lyrics = YouTubeTranscriptApi.get_transcripts(video_id, languages=['fr', 'en'])
         formated_lyric = ""
         for ligne in lyric:
             formated_lyric=formated_lyric+ligne.get('title')+'\n'
         
-        embed = discord.Embed(title="Lyrics of "+source['title'])
+        embed = discord.Embed(title="Lyrics of "+vc.source.title)
         embed.add_field(name="lyrics : ", value=formated_lyric, inline=False)
 
         await ctx.send(embed=embed)
