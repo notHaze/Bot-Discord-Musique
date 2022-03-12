@@ -132,6 +132,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
         data = await loop.run_in_executor(None, to_run)
 
         return cls(discord.FFmpegPCMAudio(data['url']), data=data, requester=requester)
+        
      
 
         
@@ -344,6 +345,7 @@ class Music(commands.Cog):
             return await ctx.send('I am not currently playing anything!')
         player = self.get_player(ctx)
         source = player.current
+        print(source)
         video_id=source.get('webpage_url').strip("https://www.youtube.com/watch?v=")
         lyrics = YouTubeTranscriptApi.get_transcripts(video_id, languages=['fr', 'en'])
         formated_lyric = ""
