@@ -18,3 +18,4 @@ typing_extensions==4.0.1
 yarl==1.7.2
 youtube-dl==2021.12.17
 youtube_transcript_api==0.4.3
+ytmusicapi==0.21.0

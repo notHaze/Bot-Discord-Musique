@@ -11,6 +11,7 @@ from functools import partial
 import youtube_dl 
 import asyncio
 from youtube_transcript_api import YouTubeTranscriptApi
+from ytmusicapi import YTMusic
 
 load_dotenv('.env')
 
@@ -65,7 +66,7 @@ ffmpegopts = {
 }
 
 ytdl = youtube_dl.YoutubeDL(ytdlopts)
-
+ytmusic = YTMusic('auth_header.json')
 
 class VoiceConnectionError(commands.CommandError):
     """Custom Exception class for connection errors."""
@@ -92,7 +93,17 @@ class YTDLSource(discord.PCMVolumeTransformer):
         This is only useful when you are NOT downloading.
         """
         return self.__getattribute__(item)
+    
+    @classmethod   
+    def return_lyrics(source):
+        song = ytmusic.search(query = source.title, limit = 1, filter="songs")
+        song=song[0]
+        id = song.get('videoId')
         
+        playlist = ytmusic.get_watch_playlist(videoId=id)
+        lyric = ytmusic.get_lyrics(playlist.get('lyrics'))
+        return lyric
+
     @classmethod
     async def playlist_entries(cls, ctx, data, player):
         source={'webpage_url': data['webpage_url'], 'requester': ctx.author, 'title': data['title']}
@@ -102,7 +113,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
     @classmethod
     async def create_source(cls, ctx, search: str, *, loop, download=False, fromloop, player):
         loop = loop or asyncio.get_event_loop()
-
+        
         to_run = partial(ytdl.extract_info, url=search, download=download)
         data = await loop.run_in_executor(None, to_run)
 
@@ -120,6 +131,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
             return {'webpage_url': data['webpage_url'], 'requester': ctx.author, 'title': data['title']}
 
         return cls(discord.FFmpegPCMAudio(source), data=data, requester=ctx.author)
+
 
     @classmethod
     async def regather_stream(cls, data, *, loop):
@@ -352,7 +364,7 @@ class Music(commands.Cog):
         if not vc or not vc.is_playing():
             return await ctx.send('I am not currently playing anything!')
         video_id = vc.source.web_url[32:]
-
+        """
         lyrics = YouTubeTranscriptApi.get_transcript(video_id)
         formated_lyric = ""
         for ligne in lyrics:
@@ -371,6 +383,16 @@ class Music(commands.Cog):
                 
         embed = discord.Embed(title="Lyrics of "+vc.source.title)
         embed.add_field(name="lyrics : ", value=formated_lyric, inline=False)
+        await ctx.send(embed=embed)
+        """
+        lyrics = YTDLSource.return_lyrics(vc.source)
+        if lyrics == None:
+            embed = discord.Embed(title="Lyrics of "+vc.source.title)
+            embed.add_field(name="Error : ", value="Couldn't retrieve the lyrics of the current music", inline=False)
+        else:
+            embed = discord.Embed(title="Lyrics of "+vc.source.title)
+            embed.add_field(name="lyrics : ", value=lyrics.get('lyrics'), inline=False)
+            embed.add_field(name="Source : ", value=lyrics.get('source'), inline=False)
         await ctx.send(embed=embed)
         
     @commands.command(name='remove', aliases=['rm'])
