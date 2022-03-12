@@ -95,7 +95,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
         return self.__getattribute__(item)
     
     @classmethod   
-    def return_lyrics(source):
+    def return_lyrics(cls, ctx, source):
         song = ytmusic.search(query = source.title, limit = 1, filter="songs")
         song=song[0]
         id = song.get('videoId')
@@ -385,7 +385,7 @@ class Music(commands.Cog):
         embed.add_field(name="lyrics : ", value=formated_lyric, inline=False)
         await ctx.send(embed=embed)
         """
-        lyrics = YTDLSource.return_lyrics(vc.source)
+        lyrics = YTDLSource.return_lyrics(ctx, vc.source)
         if lyrics == None:
             embed = discord.Embed(title="Lyrics of "+vc.source.title)
             embed.add_field(name="Error : ", value="Couldn't retrieve the lyrics of the current music", inline=False)
