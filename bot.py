@@ -10,6 +10,7 @@ from async_timeout import timeout
 from functools import partial
 import youtube_dl 
 import asyncio
+from youtube_transcript_api import YouTubeTranscriptApi
 
 load_dotenv('.env')
 
@@ -213,6 +214,7 @@ class MusicPlayer(commands.Cog):
     def destroy(self, guild):
         """Disconnect and cleanup the player."""
         return self.bot.loop.create_task(self._cog.cleanup(guild))
+        
 
 
 
@@ -332,6 +334,26 @@ class Music(commands.Cog):
 
         vc.pause()
         await ctx.send(f'**`{ctx.author}`**: Paused the song!')
+    
+    @commands.command(name='lyrics')
+    async def lyrics_(self, ctx):
+        """Retrieve the current video lyrics"""
+        vc = ctx.voice_client
+
+        if not vc or not vc.is_playing():
+            return await ctx.send('I am not currently playing anything!')
+        player = self.get_player(ctx)
+        source = player.current
+        video_id=source['webpage_url'].strip("https://www.youtube.com/watch?v=")
+        lyrics = YouTubeTranscriptApi.get_transcripts(video_id, languages=['fr', 'en'])
+        formated_lyric = ""
+        for ligne in lyric:
+            formated_lyric=formated_lyric+ligne['text']+'\n'
+        
+        embed = discord.Embed(title="Lyrics of "+source['title'])
+        embed.add_field(name="lyrics : ", value=formated_lyric, inline=False)
+
+        await ctx.send(embed=embed)
         
     @commands.command(name='remove', aliases=['rm'])
     async def remove_(self, ctx, index: int):
@@ -340,8 +362,6 @@ class Music(commands.Cog):
 
         if not vc or not vc.is_playing():
             return await ctx.send('I am not currently playing anything!')
-        elif vc.is_paused():
-            return
 
         player = self.get_player(ctx)
         temp_song=[]
