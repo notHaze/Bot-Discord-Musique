@@ -343,7 +343,7 @@ class Music(commands.Cog):
 
         if not vc or not vc.is_playing():
             return await ctx.send('I am not currently playing anything!')
-        video_id = vc.source.web_url.strip("https://www.youtube.com/watch?v=")
+        video_id = vc.source.web_url[32:]
 
         lyrics = YouTubeTranscriptApi.get_transcript(video_id)
         formated_lyric = ""
