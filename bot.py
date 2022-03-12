@@ -336,7 +336,7 @@ class Music(commands.Cog):
         vc.pause()
         await ctx.send(f'**`{ctx.author}`**: Paused the song!')
     
-    @commands.command(name='lyrics')
+    @commands.command(name='lyrics', aliases=['lyric', 'ly'])
     async def lyrics_(self, ctx):
         """Retrieve the current video lyrics"""
         vc = ctx.voice_client
@@ -349,11 +349,11 @@ class Music(commands.Cog):
         formated_lyric = ""
         for ligne in lyrics:
             formated_lyric=formated_lyric+ligne.get('text')+'\n'
-        
-        embed = discord.Embed(title="Lyrics of "+vc.source.title)
-        embed.add_field(name="lyrics : ", value=formated_lyric, inline=False)
-
-        await ctx.send(embed=embed)
+        for i in range(len(formated_lyric) mod 1024):
+            part_lyric = formated_lyric[1024*i:1024*i+1]
+            embed = discord.Embed(title="Lyrics of "+vc.source.title+" "+str(i)+"/"+str(len(formated_lyric) mod 1024))
+            embed.add_field(name="lyrics : ", value=part_lyric, inline=False)
+            await ctx.send(embed=embed)
         
     @commands.command(name='remove', aliases=['rm'])
     async def remove_(self, ctx, index: int):
