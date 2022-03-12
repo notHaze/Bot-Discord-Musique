@@ -349,9 +349,9 @@ class Music(commands.Cog):
         formated_lyric = ""
         for ligne in lyrics:
             formated_lyric=formated_lyric+ligne.get('text')+'\n'
-        for i in range(len(formated_lyric) mod 1024):
+        for i in range(len(formated_lyric) % 1024):
             part_lyric = formated_lyric[1024*i:1024*i+1]
-            embed = discord.Embed(title="Lyrics of "+vc.source.title+" "+str(i)+"/"+str(len(formated_lyric) mod 1024))
+            embed = discord.Embed(title="Lyrics of "+vc.source.title+" "+str(i)+"/"+str(len(formated_lyric) % 1024))
             embed.add_field(name="lyrics : ", value=part_lyric, inline=False)
             await ctx.send(embed=embed)
         
