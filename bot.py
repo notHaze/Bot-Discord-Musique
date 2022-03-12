@@ -134,7 +134,13 @@ class YTDLSource(discord.PCMVolumeTransformer):
         return cls(discord.FFmpegPCMAudio(data['url']), data=data, requester=requester)
         
      
-
+def formate_string(string):
+    string=''.join([i if ord(i) < 128 else '' for i in string])
+    if string=="":
+        return ""
+    string=string.lower()
+    string=string[0].upper()+string[1:]
+    return string+'\n'
         
         
 
@@ -336,13 +342,7 @@ class Music(commands.Cog):
         vc.pause()
         await ctx.send(f'**`{ctx.author}`**: Paused the song!')
         
-    def formate_string(string):
-        string=''.join([i if ord(i) < 128 else '' for i in string])
-        if string=="":
-            return ""
-        string=string.lower()
-        string=string[0].upper()+string[1:]
-        return string+'\n'
+
         
     @commands.command(name='lyrics', aliases=['lyric', 'ly'])
     async def lyrics_(self, ctx):
