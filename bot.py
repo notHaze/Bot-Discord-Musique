@@ -348,7 +348,7 @@ class Music(commands.Cog):
         lyrics = YouTubeTranscriptApi.get_transcript(video_id)
         formated_lyric = ""
         for ligne in lyrics:
-            formated_lyric=formated_lyric+ligne.get('title')+'\n'
+            formated_lyric=formated_lyric+ligne.get('text')+'\n'
         
         embed = discord.Embed(title="Lyrics of "+vc.source.title)
         embed.add_field(name="lyrics : ", value=formated_lyric, inline=False)
