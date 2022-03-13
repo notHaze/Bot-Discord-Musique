@@ -386,14 +386,48 @@ class Music(commands.Cog):
         await ctx.send(embed=embed)
         """
         lyrics = YTDLSource.return_lyrics(ctx, vc.source)
+
+
         if lyrics == None:
+            lyrics = YouTubeTranscriptApi.get_transcript(video_id)
+            formated_lyric = ""
+            for ligne in lyrics:
+                if '[' in ligne.get('text'):
+                    pass
+                elif len(formated_lyric+ligne.get('text')) >= 1024:
+                
+                    embed = discord.Embed(title="Lyrics of "+vc.source.title)
+                    embed.add_field(name="lyrics : ", value=formated_lyric, inline=False)
+                    await ctx.send(embed=embed)
+                    formated_lyric=formate_string(ligne.get('text'))
+
+                else:
+                
+                    formated_lyric=formated_lyric+formate_string(ligne.get('text'))
+                    
             embed = discord.Embed(title="Lyrics of "+vc.source.title)
-            embed.add_field(name="Error : ", value="Couldn't retrieve the lyrics of the current music", inline=False)
+            embed.add_field(name="lyrics : ", value=formated_lyric, inline=False)
+            await ctx.send(embed=embed)
+            
         else:
+            list_ly = lyrics.get('lyrics').split('\n')
+            
+            for ligne in list_ly:
+                if len(formated_lyric+ligne.get('text')) >= 1024:
+                
+                    embed = discord.Embed(title="Lyrics of "+vc.source.title)
+                    embed.add_field(name="lyrics : ", value=formated_lyric, inline=False)
+                    embed.add_field(name="Source : ", value=lyrics.get('source'), inline=True)
+                    await ctx.send(embed=embed)
+                    formated_lyric=ligne+'\n'
+
+                else:
+                
+                    formated_lyric=formated_lyric+ligne+'\n'
+                    
             embed = discord.Embed(title="Lyrics of "+vc.source.title)
-            embed.add_field(name="lyrics : ", value=lyrics.get('lyrics'), inline=False)
-            embed.add_field(name="Source : ", value=lyrics.get('source'), inline=False)
-        await ctx.send(embed=embed)
+            embed.add_field(name="lyrics : ", value=formated_lyric, inline=False)
+            await ctx.send(embed=embed)
         
     @commands.command(name='remove', aliases=['rm'])
     async def remove_(self, ctx, index: int):
