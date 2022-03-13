@@ -387,10 +387,10 @@ class Music(commands.Cog):
         """
         lyrics = YTDLSource.return_lyrics(ctx, vc.source)
 
-
+        formated_lyric = ""
         if lyrics == None:
             lyrics = YouTubeTranscriptApi.get_transcript(video_id)
-            formated_lyric = ""
+            
             for ligne in lyrics:
                 if '[' in ligne.get('text'):
                     pass
