@@ -57,6 +57,7 @@ ytdlopts = {
     'no_warnings': True,
     'default_search': 'auto',
     'flatplaylist': True,
+    'netrc': True,
     'source_address': '0.0.0.0'  # ipv6 addresses cause issues sometimes
 }
 
@@ -427,7 +428,7 @@ class Music(commands.Cog):
                     
             embed = discord.Embed(title="Lyrics of "+vc.source.title)
             embed.add_field(name="lyrics : ", value=formated_lyric, inline=False)
-            embed.add_field(name="", value=lyrics.get('source'), inline=True)
+            embed.add_field(name="Source : ", value=lyrics.get('source'), inline=True)
             await ctx.send(embed=embed)
         
     @commands.command(name='remove', aliases=['rm'])
@@ -574,7 +575,7 @@ class Music(commands.Cog):
         await ctx.send(embed=embed)
         # await ctx.send(f'**`{ctx.author}`**: Set the volume to **{vol}%**')
 
-    @commands.command(name='stop', aliases=['leave'])
+    @commands.command(name='stop', aliases=['leave','shutup'])
     async def stop_(self, ctx):
         """Stop the currently playing song and destroy the player.
         !Warning!
