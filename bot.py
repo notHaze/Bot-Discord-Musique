@@ -407,13 +407,14 @@ class Music(commands.Cog):
                     
             embed = discord.Embed(title="Lyrics of "+vc.source.title)
             embed.add_field(name="lyrics : ", value=formated_lyric, inline=False)
+            embed.add_field(name="Source : ", value="Automately generated lyrics", inline=True)
             await ctx.send(embed=embed)
             
         else:
             list_ly = lyrics.get('lyrics').split('\n')
             
             for ligne in list_ly:
-                if len(formated_lyric+ligne.get('text')) >= 1024:
+                if len(formated_lyric+ligne) >= 1024:
                 
                     embed = discord.Embed(title="Lyrics of "+vc.source.title)
                     embed.add_field(name="lyrics : ", value=formated_lyric, inline=False)
