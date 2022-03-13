@@ -418,7 +418,6 @@ class Music(commands.Cog):
                 
                     embed = discord.Embed(title="Lyrics of "+vc.source.title)
                     embed.add_field(name="lyrics : ", value=formated_lyric, inline=False)
-                    embed.add_field(name="Source : ", value=lyrics.get('source'), inline=True)
                     await ctx.send(embed=embed)
                     formated_lyric=ligne+'\n'
 
@@ -428,6 +427,7 @@ class Music(commands.Cog):
                     
             embed = discord.Embed(title="Lyrics of "+vc.source.title)
             embed.add_field(name="lyrics : ", value=formated_lyric, inline=False)
+            embed.add_field(name="", value=lyrics.get('source'), inline=True)
             await ctx.send(embed=embed)
         
     @commands.command(name='remove', aliases=['rm'])
