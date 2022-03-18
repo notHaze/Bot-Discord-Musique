@@ -57,7 +57,7 @@ ytdlopts = {
     'no_warnings': True,
     'default_search': 'auto',
     'flatplaylist': True,
-    'cookies': 'cookies-ytdl.txt'
+    'cookies': 'cookies-ytdl.txt',
     'netrc': True,
     'source_address': '0.0.0.0'  # ipv6 addresses cause issues sometimes
 }
