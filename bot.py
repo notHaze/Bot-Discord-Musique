@@ -56,6 +56,7 @@ ytdlopts = {
     'quiet': True,
     'no_warnings': True,
     'default_search': 'auto',
+    'netrc': True,
     'flatplaylist': True,
     'source_address': '0.0.0.0'  # ipv6 addresses cause issues sometimes
 }
@@ -365,7 +366,7 @@ class Music(commands.Cog):
             return await ctx.send('I am not currently playing anything!')
         
         player = self.get_player(ctx)
-        song = vc.current
+        song = player.current
         
         temp_song=[]
         interval=player.queue.qsize()
@@ -598,7 +599,7 @@ class Music(commands.Cog):
         await ctx.send(embed=embed)
         # await ctx.send(f'**`{ctx.author}`**: Set the volume to **{vol}%**')
 
-    @commands.command(name='stop', aliases=['leave','shutup'])
+    @commands.command(name='stop', aliases=['leave','fuckoff'])
     async def stop_(self, ctx):
         """Stop the currently playing song and destroy the player.
         !Warning!
