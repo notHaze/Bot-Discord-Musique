@@ -58,6 +58,7 @@ ytdlopts = {
     'no_warnings': True,
     'default_search': 'auto',
     'netrc': True,
+    'verbose': True,
     'flatplaylist': True,
     'source_address': '0.0.0.0'  # ipv6 addresses cause issues sometimes
 }
