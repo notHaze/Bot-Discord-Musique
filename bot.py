@@ -12,7 +12,7 @@ import youtube_dl
 import asyncio
 from youtube_transcript_api import YouTubeTranscriptApi
 from ytmusicapi import YTMusic
-import yt-dlp
+import yt_dlp
 
 load_dotenv('.env')
 
