@@ -12,6 +12,7 @@ import youtube_dl
 import asyncio
 from youtube_transcript_api import YouTubeTranscriptApi
 from ytmusicapi import YTMusic
+import yt-dlp
 
 load_dotenv('.env')
 
@@ -66,7 +67,7 @@ ffmpegopts = {
     'options': '-vn'
 }
 
-ytdl = youtube_dl.YoutubeDL(ytdlopts)
+ytdl = yt_dlp.YoutubeDL(ytdlopts)
 ytmusic = YTMusic('auth_header.json')
 
 class VoiceConnectionError(commands.CommandError):
