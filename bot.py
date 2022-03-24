@@ -357,7 +357,31 @@ class Music(commands.Cog):
         await ctx.send(f'**`{ctx.author}`**: Paused the song!')
         
 
+     
+    @commands.command(name='reset')
+    async def reset_(self, ctx):
+        """Pause the currently playing song."""
+        vc = ctx.voice_client
+
+        if not vc or not vc.is_playing():
+            return await ctx.send('I am not currently playing anything!')
         
+        player = self.get_player(ctx)
+        song = vc.current
+        
+        temp_song=[]
+        interval=player.queue.qsize()
+        for i in range (interval):
+            temp_song.append(await player.queue.get())
+        temp_song.insert(0, song)
+        
+        for i in range (interval+1):
+            await player.queue.put(temp_song[i])
+            
+        await ctx.send(f'**`{ctx.author}`**: The song has been reset!')
+
+     
+     
     @commands.command(name='lyrics', aliases=['lyric', 'ly'])
     async def lyrics_(self, ctx):
         """Retrieve the current video lyrics"""
