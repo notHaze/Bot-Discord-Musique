@@ -19,6 +19,7 @@ load_dotenv('.env')
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 PREFIX = os.getenv('PREFIX')
+DOWNLOAD = os.getenv('DOWNLOAD')
 
 bot = commands.Bot(command_prefix=PREFIX)
 
@@ -109,12 +110,16 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
     @classmethod
     async def playlist_entries(cls, ctx, data, player):
-        source={'webpage_url': data['webpage_url'], 'requester': ctx.author, 'title': data['title']}
+        if DOWNLOAD:
+            source = ytdl.prepare_filename(data)
+            source = cls(discord.FFmpegPCMAudio(source), data=data, requester=ctx.author)
+        else:
+            source={'webpage_url': data['webpage_url'], 'requester': ctx.author, 'title': data['title']}
         await player.queue.put(source)
         await ctx.send(f'```ini\n[Added {data["title"]} to the Queue.]\n```')
         
     @classmethod
-    async def create_source(cls, ctx, search: str, *, loop, download=False, fromloop, player):
+    async def create_source(cls, ctx, search: str, *, loop, download=DOWNLOAD, fromloop, player):
         loop = loop or asyncio.get_event_loop()
         
         to_run = partial(ytdl.extract_info, url=search, download=download)
@@ -337,12 +342,11 @@ class Music(commands.Cog):
             await ctx.invoke(self.connect_)
 
         player = self.get_player(ctx)
-        download = True
         
             
         # If download is False, source will be a dict which will be used later to regather the stream.
         # If download is True, source will be a discord.FFmpegPCMAudio with a VolumeTransformer.
-        source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop, download=download, fromloop=False, player=player)
+        source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop, download=DOWNLOAD, fromloop=False, player=player)
 
         await player.queue.put(source)
         if loop == True:
@@ -350,8 +354,8 @@ class Music(commands.Cog):
             a=0
             loop_queue=[]
             for song in listtitle:
-                loop_queue.append(await YTDLSource.create_source(ctx, song, loop=self.bot.loop, download=download, fromloop=True, player=player))
-            loop_queue.insert(0,await YTDLSource.create_source(ctx, vc.source.title, loop=self.bot.loop, download=download, fromloop=True, player=player))
+                loop_queue.append(await YTDLSource.create_source(ctx, song, loop=self.bot.loop, download=DOWNLOAD, fromloop=True, player=player))
+            loop_queue.insert(0,await YTDLSource.create_source(ctx, vc.source.title, loop=self.bot.loop, download=DOWNLOAD, fromloop=True, player=player))
             
     @commands.command(name='pause')
     async def pause_(self, ctx):
@@ -482,6 +486,20 @@ class Music(commands.Cog):
         if index<=0 or index>interval:
             return await ctx.send('Uncorrect song number')
 
+        
+        if download_gl:
+            source = temp_song[index-1]
+            source = await YTDLSource.regather_stream(source, loop=self.bot.loop)
+            info = ytdl.extract_info(source.web_url, download=False)
+            filename = ytdl.prepare_filename(info)
+            try:
+                if os.path.exists(filename):
+                    os.remove(filename)
+                else:
+                    pass
+            except Exception as E:  
+                print(E)
+            
         del temp_song[index-1]
         for i in temp_song:
             await player.queue.put(i)
