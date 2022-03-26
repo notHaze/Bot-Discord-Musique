@@ -487,7 +487,7 @@ class Music(commands.Cog):
             return await ctx.send('Uncorrect song number')
 
         
-        if download_gl:
+        if DOWNLOAD:
             source = temp_song[index-1]
             source = await YTDLSource.regather_stream(source, loop=self.bot.loop)
             info = ytdl.extract_info(source.web_url, download=False)
