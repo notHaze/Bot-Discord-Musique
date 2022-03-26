@@ -57,7 +57,7 @@ ytdlopts = {
     'quiet': True,
     'no_warnings': True,
     'default_search': 'auto',
-    'netrc': True,
+    #'netrc': True,
     'verbose': True,
     'flatplaylist': True,
     'source_address': '0.0.0.0'  # ipv6 addresses cause issues sometimes
@@ -68,7 +68,7 @@ ffmpegopts = {
     'options': '-vn'
 }
 
-ytdl = yt_dlp.YoutubeDL(ytdlopts)
+ytdl = youtube_dl.YoutubeDL(ytdlopts)
 ytmusic = YTMusic('auth_header.json')
 
 class VoiceConnectionError(commands.CommandError):
@@ -328,12 +328,12 @@ class Music(commands.Cog):
             await ctx.invoke(self.connect_)
 
         player = self.get_player(ctx)
-
+        download = False
         
             
         # If download is False, source will be a dict which will be used later to regather the stream.
         # If download is True, source will be a discord.FFmpegPCMAudio with a VolumeTransformer.
-        source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop, download=False, fromloop=False, player=player)
+        source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop, download=download, fromloop=False, player=player)
 
         await player.queue.put(source)
         if loop == True:
@@ -341,8 +341,8 @@ class Music(commands.Cog):
             a=0
             loop_queue=[]
             for song in listtitle:
-                loop_queue.append(await YTDLSource.create_source(ctx, song, loop=self.bot.loop, download=False, fromloop=True, player=player))
-            loop_queue.insert(0,await YTDLSource.create_source(ctx, vc.source.title, loop=self.bot.loop, download=False, fromloop=True, player=player))
+                loop_queue.append(await YTDLSource.create_source(ctx, song, loop=self.bot.loop, download=download, fromloop=True, player=player))
+            loop_queue.insert(0,await YTDLSource.create_source(ctx, vc.source.title, loop=self.bot.loop, download=download, fromloop=True, player=player))
             
     @commands.command(name='pause')
     async def pause_(self, ctx):
