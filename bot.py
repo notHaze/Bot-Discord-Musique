@@ -68,7 +68,7 @@ ffmpegopts = {
     'options': '-vn'
 }
 
-ytdl = youtube_dl.YoutubeDL(ytdlopts)
+ytdl = yt_dlp.YoutubeDL(ytdlopts)
 ytmusic = YTMusic('auth_header.json')
 
 class VoiceConnectionError(commands.CommandError):
@@ -229,6 +229,15 @@ class MusicPlayer(commands.Cog):
 
             try:
                 # We are no longer playing this song...
+                info = ytdl.extract_info(source.web_url, download=False)
+                filename = ytdl.prepare_filename(info)
+                try:
+                    if os.path.exists(filename):
+                        os.remove(filename)
+                    else:
+                        pass
+                except Exception as E:  
+                    print(E)
                 await self.np.delete()
             except discord.HTTPException:
                 pass
@@ -328,7 +337,7 @@ class Music(commands.Cog):
             await ctx.invoke(self.connect_)
 
         player = self.get_player(ctx)
-        download = False
+        download = True
         
             
         # If download is False, source will be a dict which will be used later to regather the stream.
