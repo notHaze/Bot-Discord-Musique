@@ -1,48 +1,18 @@
-[{
-	"Host raw": "https://.youtube.com/",
-	"Name raw": "LOGIN_INFO",
-	"Path raw": "/",
-	"Content raw": "AFmmF2swRgIhAI_dt1fOebJkeZmiel088qXXe-INPk65CwE337Uxuk4LAiEAnVOGqhljXVtBsb5SSzZ3bbXuOxdgQXXoHLLcFE57ir8:QUQ3MjNmeW5HRXpHZmVORzl2aWxiYWZSLUJEMW5oMHBTc3JISE9WRHZEU2Q3Qy00a1gzU1Q3eDc4OFJYalNzRVJhcW5vODZJSnFQR0Jab2wtSDBKYjVudThpTzJoWnVZZXVXZXRVdTdxZS1hUzhSUWhvUjIwdGlaXzFpcFNka002eGJWQnlPbmdWZXJsQ0dGb1N2UUZRMldlZGdLZXRXY0VieEJYcTZ1SmZMT2tSbVJmcWU0eEFv",
-	"Expires": "20-06-2030 13:41:37",
-	"Expires raw": "1908186097",
-	"Send for": "Encrypted connections only",
-	"Send for raw": "true",
-	"HTTP only raw": "true",
-	"SameSite raw": "no_restriction",
-	"This domain only": "Valid for subdomains",
-	"This domain only raw": "false",
-	"Store raw": "firefox-default",
-	"First Party Domain": ""
-},
-{
-	"Host raw": "https://.youtube.com/",
-	"Name raw": "__Secure-3PSIDCC",
-	"Path raw": "/",
-	"Content raw": "AJi4QfGXGw6Y7N6MxVIwp1WebpoxQnw0XiBYAgInW8M8hX7ZMf7z7IRf0ns6X-VGMxrPw1FmveE",
-	"Expires": "24-03-2030 14:31:15",
-	"Expires raw": "1900589475",
-	"Send for": "Encrypted connections only",
-	"Send for raw": "true",
-	"HTTP only raw": "true",
-	"SameSite raw": "no_restriction",
-	"This domain only": "Valid for subdomains",
-	"This domain only raw": "false",
-	"Store raw": "firefox-default",
-	"First Party Domain": ""
-},
-{
-	"Host raw": "https://.youtube.com/",
-	"Name raw": "CONSENT",
-	"Path raw": "/",
-	"Content raw": "YES+cb.20210905-11-p0.fr+FX+024",
-	"Expires": "10-01-2038 08:59:59",
-	"Expires raw": "2146723199",
-	"Send for": "Encrypted connections only",
-	"Send for raw": "true",
-	"HTTP only raw": "false",
-	"SameSite raw": "no_restriction",
-	"This domain only": "Valid for subdomains",
-	"This domain only raw": "false",
-	"Store raw": "firefox-default",
-	"First Party Domain": ""
-}]
+.youtube.com	TRUE	/	TRUE		__Secure-3PSID	IggUw-5WMvYbBFckNlSTWdQFy6h7o8i8sViqBAc0xFvEhzLvGiigYi9X31wqQux8hiJjgQ.
+.youtube.com	TRUE	/	TRUE		GPS	1
+.youtube.com	TRUE	/	FALSE		SIDCC	AJi4QfFyoOBHhXxou5Bh6Perd3_SxXd2Ec6xL3XYSuF6r1otGuQ5YPlFMdHGSM5AqGwzFdYO
+.youtube.com	TRUE	/	TRUE		YSC	kqZixkdaNVk
+.youtube.com	TRUE	/	FALSE		SID	IggUw-5WMvYbBFckNlSTWdQFy6h7o8i8sViqBAc0xFvEhzLvMOPZoEB76SrcwA2t3tcftA.
+.youtube.com	TRUE	/	TRUE		CONSISTENCY	AGDxDeOeERImQKq2EOcbDUfhnPcUOqWwzjDeBgeg4OJDY7r5BdejKLU_xiYrH_Iti4l4mfFdUWIEZoVV37fwNrpDTCzWdZp4tb-7AdaS5BKX3hJ0vG7salRbkaAmNNJFObG612z4_zmxvK2G1PcTAVU
+.youtube.com	TRUE	/	TRUE		SAPISID	aHoB5h20GZ7nD7fL/ALvR9n8oUghCtAf5m
+.youtube.com	TRUE	/	TRUE		SSID	AjN_P0UJFcMwcWYW-
+.youtube.com	TRUE	/	TRUE		__Secure-1PAPISID	aHoB5h20GZ7nD7fL/ALvR9n8oUghCtAf5m
+.youtube.com	TRUE	/	TRUE		__Secure-1PSID	IggUw-5WMvYbBFckNlSTWdQFy6h7o8i8sViqBAc0xFvEhzLvmyeQBgh-U9jgsCXi_PbjmQ.
+.youtube.com	TRUE	/	TRUE		__Secure-3PAPISID	aHoB5h20GZ7nD7fL/ALvR9n8oUghCtAf5m
+.youtube.com	TRUE	/	TRUE		__Secure-3PSIDCC	AJi4QfGwoPCb-HUAnWvAinL0HIJMt-saHVq654B8kYlN_-SFTXQfQGvILSXaNsdToNUEB_wGNQ
+.youtube.com	TRUE	/	FALSE		APISID	bUls8h2wZ-OBEv_i/ALIjB6qTwLQzfvvIW
+.youtube.com	TRUE	/	TRUE		CONSENT	YES+srp.gws-20220322-0-RC3.fr+FX+644
+.youtube.com	TRUE	/	FALSE		HSID	AgOZW0dyg9_JMDiAL
+.youtube.com	TRUE	/	TRUE		LOGIN_INFO	AFmmF2swRgIhALmx5oCs59OjarSeszdL7a74P082TDJidkiY7mBMm29lAiEAsIxrFegqGX95G5Pgqas1AD2WV72Tr38tjz4VyUgLqHg:QUQ3MjNmd2hFa3ROcDViNUFTT1RGdnYxeHBnX3loY0Zjc3BvZmdjTlJ0OF9KMnFCU1RKV2R2TUxXeU9nMXlaZkh5M3JsVkxEbjlzT21rbTI4ZzQzRzdPMmNWZ04tZGVvZDdMc05zeFM2OU4xR3ExdzJXT3prdTdqbjF3ZXJmb3pPUUwxOGx0NGZIZHNJNGZNNkoxU0NHbWdIWFpZUG92d3Zn
+.youtube.com	TRUE	/	TRUE		PREF	tz=Europe.Paris
+.youtube.com	TRUE	/	TRUE		VISITOR_INFO1_LIVE	gzOtvA7hYG8
