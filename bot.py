@@ -59,7 +59,7 @@ ytdlopts = {
     'no_warnings': True,
     'default_search': 'auto',
     'netrc': True,
-    'cookies': 'cookies-ytdl.txt',
+    'cookies-from-browser': 'firefox:e4d2yrx4.default',
     'verbose': True,
     'flatplaylist': True,
     'source_address': '0.0.0.0'  # ipv6 addresses cause issues sometimes
