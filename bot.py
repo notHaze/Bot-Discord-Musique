@@ -249,7 +249,7 @@ class MusicPlayer(commands.Cog):
 
     def destroy(self, guild):
         """Disconnect and cleanup the player."""
-	os.remove("*.webm")
+        os.remove("*.webm")
         return self.bot.loop.create_task(self._cog.cleanup(guild))
         
 
