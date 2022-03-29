@@ -250,7 +250,13 @@ class MusicPlayer(commands.Cog):
 
     def destroy(self, guild):
         """Disconnect and cleanup the player."""
-        os.remove("*.webm")
+        directory = "."
+
+	files_in_directory = os.listdir(directory)
+	filtered_files = [file for file in files_in_directory if file.endswith(".webm")]
+	for file in filtered_files:
+		path_to_file = os.path.join(directory, file)
+		os.remove(path_to_file)
         return self.bot.loop.create_task(self._cog.cleanup(guild))
         
 
