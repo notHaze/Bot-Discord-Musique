@@ -188,9 +188,9 @@ class MusicPlayer(commands.Cog):
         self.volume = .5
         self.current = None
 
-        ctx.bot.loop.create_task(self.player_loop())
+        ctx.bot.loop.create_task(self.player_loop(ctx))
 
-    async def player_loop(self):
+    async def player_loop(self, ctx):
         global loop_queue
         global loop
         """Our main player loop."""
@@ -202,7 +202,8 @@ class MusicPlayer(commands.Cog):
             if self.queue.empty():
                 if loop == True:
                     for song in loop_queue:
-                        await self.queue.put(song)
+                        source = await YTDLSource.create_source(ctx, song, loop=self.bot.loop, download=DOWNLOAD, fromloop=True, player=self)
+                        await self.queue.put(source)
 
             try:
                 # Wait for the next song. If we timeout cancel the player and disconnect...
@@ -362,8 +363,8 @@ class Music(commands.Cog):
             a=0
             loop_queue=[]
             for song in listtitle:
-                loop_queue.append(await YTDLSource.create_source(ctx, song, loop=self.bot.loop, download=DOWNLOAD, fromloop=True, player=player))
-            loop_queue.insert(0,await YTDLSource.create_source(ctx, vc.source.title, loop=self.bot.loop, download=DOWNLOAD, fromloop=True, player=player))
+                loop_queue.append(song)
+            loop_queue.insert(0,VC.title)
             
     @commands.command(name='pause')
     async def pause_(self, ctx):
