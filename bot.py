@@ -13,6 +13,7 @@ import asyncio
 from youtube_transcript_api import YouTubeTranscriptApi
 from ytmusicapi import YTMusic
 import yt_dlp
+import ast
 
 load_dotenv('.env')
 
@@ -276,7 +277,7 @@ class Music(commands.Cog):
 
         if  os.environ["PLAYLIST"]:
             self.playlists = {}
-            for playlist in os.environ["PLAYLIST"]:
+            for playlist in ast.literal_eval(os.environ["PLAYLIST"]):
                 self.playlists[playlist] = []
                 for song in os.environ["PLAYLIST"][playlist]:
                     self.playlists[playlist].append([song[0], song[1]])
@@ -607,6 +608,7 @@ class Music(commands.Cog):
             loop_queue=[]
             for song in listtitle:
                 loop_queue.append(await YTDLSource.create_source(ctx, song, loop=self.bot.loop, download=False, fromloop=True, player=player))
+            print("vc.source",vc.source)
             loop_queue.insert(0,await YTDLSource.create_source(ctx, vc.source, loop=self.bot.loop, download=False, fromloop=True, player=player))
         else:
             loop=False
