@@ -203,7 +203,7 @@ class MusicPlayer(commands.Cog):
                 if loop == True:
                     for song in loop_queue:
                         print(song)
-                        source = await YTDLSource.create_source(ctx, song, loop=self.bot.loop, download=DOWNLOAD, fromloop=True, player=self)
+                        source = await YTDLSource.create_source(ctx, song['title'], loop=self.bot.loop, download=DOWNLOAD, fromloop=True, player=self)
                         await self.queue.put(source)
 
             try:
