@@ -729,6 +729,7 @@ class Music(commands.Cog):
             else:
                 """La playlist s'initalise avec les musique deja présente dans la queue"""
                 self.playlists[playlist_name] = []
+                self.playlists[playlist_name].append([player.current.title, player.current.url])
                 for song in player.queue:
                     self.playlists[playlist_name].append([song.title, song.url])
                 await ctx.send(f'**`{ctx.author}`**: Created the playlist **{playlist_name}**!')
