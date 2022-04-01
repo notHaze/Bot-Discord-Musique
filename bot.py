@@ -609,7 +609,7 @@ class Music(commands.Cog):
             for song in listtitle:
                 loop_queue.append(await YTDLSource.create_source(ctx, song, loop=self.bot.loop, download=False, fromloop=True, player=player))
             print("vc.source",vc.source)
-            loop_queue.insert(0,await YTDLSource.create_source(ctx, vc.source, loop=self.bot.loop, download=False, fromloop=True, player=player))
+            loop_queue.insert(0,await YTDLSource.create_source(ctx, vc.current, loop=self.bot.loop, download=False, fromloop=True, player=player))
         else:
             loop=False
             await ctx.send(f'**`{ctx.author}`**: Unlooped the queue!')
