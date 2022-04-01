@@ -379,7 +379,6 @@ class Music(commands.Cog):
     """
     @commands.command(name='reset')
     async def reset_(self, ctx):
-        """Pause the currently playing song."""
         vc = ctx.voice_client
 
         if not vc or not vc.is_playing():
