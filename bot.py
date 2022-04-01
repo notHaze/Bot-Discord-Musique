@@ -607,9 +607,9 @@ class Music(commands.Cog):
             listtitle = list(itertools.islice(player.queue._queue, 0, None))
             loop_queue=[]
             for song in listtitle:
-                loop_queue.append(await YTDLSource.create_source(ctx, song, loop=self.bot.loop, download=False, fromloop=True, player=player))
+                loop_queue.append(song))
             print("vc.source",vc.source)
-            loop_queue.insert(0,await YTDLSource.create_source(ctx, player.current, loop=self.bot.loop, download=False, fromloop=True, player=player))
+            loop_queue.insert(0,vc.source.title))
         else:
             loop=False
             await ctx.send(f'**`{ctx.author}`**: Unlooped the queue!')
@@ -729,9 +729,9 @@ class Music(commands.Cog):
             else:
                 """La playlist s'initalise avec les musique deja présente dans la queue"""
                 self.playlists[playlist_name] = []
-                self.playlists[playlist_name].append([player.current.title, player.current.url])
+                self.playlists[playlist_name].append([vc.source.title, vc.source.web_url])
                 for song in player.queue:
-                    self.playlists[playlist_name].append([song.title, song.url])
+                    self.playlists[playlist_name].append([song.title, song.web_url])
                 await ctx.send(f'**`{ctx.author}`**: Created the playlist **{playlist_name}**!')
 
         else:
