@@ -376,7 +376,7 @@ class Music(commands.Cog):
         await ctx.send(f'**`{ctx.author}`**: Paused the song!')
         
 
-     """
+    """
     @commands.command(name='reset')
     async def reset_(self, ctx):
         """Pause the currently playing song."""
@@ -412,7 +412,7 @@ class Music(commands.Cog):
         song = player.current
         song.start_time = 0
         await ctx.send(f'**`{ctx.author}`**: The song has been reset!')
-        
+
 
      
     @commands.command(name='lyrics', aliases=['lyric', 'ly'])
