@@ -360,12 +360,7 @@ class Music(commands.Cog):
 
         await player.queue.put(source)
         if loop == True:
-            listtitle = list(itertools.islice(player.queue._queue, 0, None))
-            a=0
-            loop_queue=[]
-            for song in listtitle:
-                loop_queue.append(song)
-            loop_queue.insert(0,vc.title)
+            loop_queue.append(song)
             
     @commands.command(name='pause')
     async def pause_(self, ctx):
@@ -381,7 +376,7 @@ class Music(commands.Cog):
         await ctx.send(f'**`{ctx.author}`**: Paused the song!')
         
 
-     
+     """
     @commands.command(name='reset')
     async def reset_(self, ctx):
         """Pause the currently playing song."""
@@ -403,8 +398,22 @@ class Music(commands.Cog):
             await player.queue.put(temp_song[i])
             
         await ctx.send(f'**`{ctx.author}`**: The song has been reset!')
+    """
 
-     
+    @commands.command(name='reset')
+    async def reset_(self, ctx):
+        """reset the current song at 00min00s but keep the queue"""
+        vc = ctx.voice_client
+
+        if not vc or not vc.is_playing():
+            return await ctx.send('I am not currently playing anything!')
+
+        player = self.get_player(ctx)
+        song = player.current
+        song.start_time = 0
+        await ctx.send(f'**`{ctx.author}`**: The song has been reset!')
+        
+
      
     @commands.command(name='lyrics', aliases=['lyric', 'ly'])
     async def lyrics_(self, ctx):
@@ -483,6 +492,8 @@ class Music(commands.Cog):
     @commands.command(name='remove', aliases=['rm'])
     async def remove_(self, ctx, index: int):
         """remove the ieme song."""
+        global loop
+        global loop_queue
         vc = ctx.voice_client
 
         if not vc or not vc.is_playing():
@@ -496,9 +507,9 @@ class Music(commands.Cog):
         if index<=0 or index>interval:
             return await ctx.send('Uncorrect song number')
 
-        
+        source = temp_song[index-1]
         if DOWNLOAD:
-            source = temp_song[index-1]
+            
             info = ytdl.extract_info(source.web_url, download=False)
             filename = ytdl.prepare_filename(info)
             try:
@@ -509,7 +520,12 @@ class Music(commands.Cog):
             except Exception as E:  
                 print(E)
             
-        del temp_song[index-1]
+        if loop:
+            loop_queue.pop(loop_queue.index(source))
+
+        try:
+            del temp_song[index-1]
+            
         for i in temp_song:
             await player.queue.put(i)
         await ctx.send(f'**`{ctx.author}`**: Removed a song!')
@@ -578,11 +594,10 @@ class Music(commands.Cog):
             loop=True
             await ctx.send(f'**`{ctx.author}`**: Looped the queue!')
             listtitle = list(itertools.islice(player.queue._queue, 0, None))
-            a=0
             loop_queue=[]
             for song in listtitle:
                 loop_queue.append(await YTDLSource.create_source(ctx, song, loop=self.bot.loop, download=False, fromloop=True, player=player))
-            loop_queue.insert(0,await YTDLSource.create_source(ctx, vc.source.title, loop=self.bot.loop, download=False, fromloop=True, player=player))
+            loop_queue.insert(0,await YTDLSource.create_source(ctx, vc.source, loop=self.bot.loop, download=False, fromloop=True, player=player))
         else:
             loop=False
             await ctx.send(f'**`{ctx.author}`**: Unlooped the queue!')
