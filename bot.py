@@ -524,7 +524,9 @@ class Music(commands.Cog):
 
         try:
             del temp_song[index-1]
-            
+        except Exception as E:
+            print(E) 
+           
         for i in temp_song:
             await player.queue.put(i)
         await ctx.send(f'**`{ctx.author}`**: Removed a song!')
