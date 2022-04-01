@@ -365,7 +365,7 @@ class Music(commands.Cog):
             loop_queue=[]
             for song in listtitle:
                 loop_queue.append(song)
-            loop_queue.insert(0,VC.title)
+            loop_queue.insert(0,vc.title)
             
     @commands.command(name='pause')
     async def pause_(self, ctx):
