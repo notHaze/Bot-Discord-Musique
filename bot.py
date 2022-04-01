@@ -274,6 +274,15 @@ class Music(commands.Cog):
         self.bot = bot
         self.players = {}
 
+        if  os.environ["PLAYLIST"]:
+            self.playlists = {}
+            for playlist in os.environ["PLAYLIST"]:
+                self.playlists[playlist] = []
+                for song in os.environ["PLAYLIST"][playlist]:
+                    self.playlists[playlist].append([song[0], song[1]])
+        else:
+            self.playlists = {}
+
     async def cleanup(self, guild):
         try:
             await guild.voice_client.disconnect()
@@ -665,6 +674,78 @@ class Music(commands.Cog):
             return await ctx.send('I am not currently playing anything!')
 
         await self.cleanup(ctx.guild)
+    
+    #Commande playlist
+    #peut ajouter une playlist au dictionnaire
+    #peut supprimer une playlist du dictionnaire
+    #peut montrer la liste des playlists
+    #dictionnaire = {nom_playlist: [liste_de_musiques]}
+    #liste_de_musiques = [titre_musique, url_musique]
+    @commands.command(name='playlist', aliases=['pl'])
+    async def playlist_(self, ctx, *, playlist_name: str):
+        """Playlist command.
+        Usage:
+            {prefix}playlist playlist_name
+        Parameters:
+            playlist_name: The name of the playlist to play.
+        """
+        vc = ctx.voice_client
+
+        if not vc or not vc.is_connected():
+            return await ctx.send('I am not currently connected to voice!')
+
+        player = self.get_player(ctx)
+        if not player.current:
+            return await ctx.send('I am not currently playing anything!')
+
+        if "remove" in playlist_name:
+            playlist_name = playlist_name.replace("remove", "")
+            if playlist_name in self.playlists:
+                del self.playlists[playlist_name]
+                await ctx.send(f'**`{ctx.author}`**: Removed the playlist **{playlist_name}**')
+            else:
+                await ctx.send(f'**`{ctx.author}`**: The playlist **{playlist_name}** does not exist!')
+        elif "show" in playlist_name:
+            playlist_name = playlist_name.replace("show", "")
+            if playlist_name in self.playlists:
+                await ctx.send(f'**`{ctx.author}`**: The playlist **{playlist_name}** contains the following songs:')
+                for song in self.playlists[playlist_name]:
+                    await ctx.send(f'**`{song[0]}`**')
+            else:
+                await ctx.send(f'**`{ctx.author}`**: The playlist **{playlist_name}** does not exist!')
+        elif "list" in playlist_name:
+            await ctx.send(f'**`{ctx.author}`**: The following playlists are available:')
+            for playlist in self.playlists:
+                await ctx.send(f'**`{playlist}`**')
+        elif playlist_name in self.playlists:
+            player.queue.extend(self.playlists[playlist_name])
+            await ctx.send(f'**`{ctx.author}`**: Added `{playlist_name}` to the queue!')
+        elif "add" in playlist_name:
+            playlist_name = playlist_name.replace("add", "")
+            if playlist_name in self.playlists:
+                await ctx.send(f'**`{ctx.author}`**: The playlist **{playlist_name}** already exists!')
+            else:
+                """La playlist s'initalise avec les musique deja présente dans la queue"""
+                self.playlists[playlist_name] = []
+                for song in player.queue:
+                    self.playlists[playlist_name].append([song.title, song.url])
+                await ctx.send(f'**`{ctx.author}`**: Created the playlist **{playlist_name}**!')
+
+        else:
+            await ctx.send(f'**`{ctx.author}`**: That playlist does not exist!')
+        
+        if self.playlists:
+            PLAYLIST = {}
+            for playlist in self.playlists:
+                PLAYLIST[playlist] = []
+                for song in self.playlists[playlist]:
+                    PLAYLIST[playlist].append([song[0], song[1]])
+            os.environ["PLAYLIST"] = PLAYLIST
+        else:
+            os.environ["PLAYLIST"] = {}
+  
+
+
         
 bot.add_cog(Music(bot))
 bot.run(TOKEN)
