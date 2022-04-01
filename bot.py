@@ -279,7 +279,7 @@ class Music(commands.Cog):
             self.playlists = {}
             for playlist in ast.literal_eval(os.environ["PLAYLIST"]):
                 self.playlists[playlist] = []
-                for song in os.environ["PLAYLIST"][playlist]:
+                for song in playlist:
                     self.playlists[playlist].append([song[0], song[1]])
         else:
             self.playlists = {}
