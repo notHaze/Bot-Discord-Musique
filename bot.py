@@ -683,7 +683,7 @@ class Music(commands.Cog):
     #peut montrer la liste des playlists
     #dictionnaire = {nom_playlist: [liste_de_musiques]}
     #liste_de_musiques = [titre_musique, url_musique]
-    @commands.command(name='playlist', aliases=['pl'])
+    @commands.command(name='plist', aliases=['pl'])
     async def playlist_(self, ctx, *, playlist_name: str):
         """Playlist command.
         Usage:
@@ -701,14 +701,14 @@ class Music(commands.Cog):
             return await ctx.send('I am not currently playing anything!')
 
         if "remove" in playlist_name:
-            playlist_name = playlist_name.replace("remove", "")
+            playlist_name = playlist_name.replace("remove ", "")
             if playlist_name in self.playlists:
                 del self.playlists[playlist_name]
                 await ctx.send(f'**`{ctx.author}`**: Removed the playlist **{playlist_name}**')
             else:
                 await ctx.send(f'**`{ctx.author}`**: The playlist **{playlist_name}** does not exist!')
         elif "show" in playlist_name:
-            playlist_name = playlist_name.replace("show", "")
+            playlist_name = playlist_name.replace("show ", "")
             if playlist_name in self.playlists:
                 await ctx.send(f'**`{ctx.author}`**: The playlist **{playlist_name}** contains the following songs:')
                 for song in self.playlists[playlist_name]:
@@ -723,7 +723,7 @@ class Music(commands.Cog):
             player.queue.extend(self.playlists[playlist_name])
             await ctx.send(f'**`{ctx.author}`**: Added `{playlist_name}` to the queue!')
         elif "add" in playlist_name:
-            playlist_name = playlist_name.replace("add", "")
+            playlist_name = playlist_name.replace("add ", "")
             if playlist_name in self.playlists:
                 await ctx.send(f'**`{ctx.author}`**: The playlist **{playlist_name}** already exists!')
             else:
