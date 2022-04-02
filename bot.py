@@ -204,7 +204,7 @@ class MusicPlayer(commands.Cog):
                 if loop == True:
                     for song in loop_queue:
                         print(song)
-                        source = await YTDLSource.create_source(ctx, song['title'], loop=self.bot.loop, download=DOWNLOAD, fromloop=True, player=self)
+                        source = await YTDLSource.create_source(ctx, song, loop=self.bot.loop, download=DOWNLOAD, fromloop=True, player=self)
                         await self.queue.put(source)
 
             try:
@@ -370,7 +370,7 @@ class Music(commands.Cog):
 
         await player.queue.put(source)
         if loop == True:
-            loop_queue.append(song)
+            loop_queue.append(source['title'])
             
     @commands.command(name='pause')
     async def pause_(self, ctx):
@@ -607,8 +607,7 @@ class Music(commands.Cog):
             listtitle = list(itertools.islice(player.queue._queue, 0, None))
             loop_queue=[]
             for song in listtitle:
-                loop_queue.append(song))
-            print("vc.source",vc.source)
+                loop_queue.append(song['title'])
             loop_queue.insert(0,vc.source.title))
         else:
             loop=False
