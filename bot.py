@@ -728,7 +728,7 @@ class Music(commands.Cog):
         elif playlist_name in self.playlists:
             list_song = self.playlists[playlist_name]
             for song in list_song:
-                source = await YTDLSource.create_source(ctx, song['web_url'], loop=self.bot.loop, download=DOWNLOAD, fromloop=True, player=player)
+                source = await YTDLSource.create_source(ctx, song[1], loop=self.bot.loop, download=DOWNLOAD, fromloop=True, player=player)
                 await player.queue.put(source)
             await ctx.send(f'**`{ctx.author}`**: Added `{playlist_name}` to the queue!')
 		
