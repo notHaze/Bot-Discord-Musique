@@ -608,7 +608,7 @@ class Music(commands.Cog):
             loop_queue=[]
             for song in listtitle:
                 loop_queue.append(song['title'])
-            loop_queue.insert(0,vc.source.title))
+            loop_queue.insert(0,vc.source.title)
         else:
             loop=False
             await ctx.send(f'**`{ctx.author}`**: Unlooped the queue!')
