@@ -726,8 +726,8 @@ class Music(commands.Cog):
                 await ctx.send(f'**`{playlist}`**')
 		
         elif playlist_name in self.playlists:
-	    list_song = self.playlists[playlist_name]
-	    for song in list_song:
+            list_song = self.playlists[playlist_name]
+            for song in list_song:
                 source = await YTDLSource.create_source(ctx, song['web_url'], loop=self.bot.loop, download=DOWNLOAD, fromloop=True, player=player)
                 await player.queue.put(source)
             await ctx.send(f'**`{ctx.author}`**: Added `{playlist_name}` to the queue!')
@@ -740,7 +740,7 @@ class Music(commands.Cog):
                 """La playlist s'initalise avec les musique deja présente dans la queue"""
                 self.playlists[playlist_name] = []
                 self.playlists[playlist_name].append([vc.source.title, vc.source.web_url])
-		listtitle = list(itertools.islice(player.queue._queue, 0, None))
+                listtitle = list(itertools.islice(player.queue._queue, 0, None))
                 for song in listtitle:
                     self.playlists[playlist_name].append([song.title, song.web_url])
                 await ctx.send(f'**`{ctx.author}`**: Created the playlist **{playlist_name}**!')
