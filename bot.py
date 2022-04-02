@@ -294,6 +294,11 @@ class Music(commands.Cog):
             del self.players[guild.id]
         except KeyError:
             pass
+	
+	global loop
+	global loop_queue
+	loop = False
+	loop_queue = []
 
     async def __local_check(self, ctx):
         """A local check which applies to all commands in this cog."""
