@@ -696,8 +696,7 @@ class Music(commands.Cog):
             return await ctx.send('I am not currently connected to voice!')
 
         player = self.get_player(ctx)
-        if not player.current:
-            return await ctx.send('I am not currently playing anything!')
+        
 
         if "remove" in playlist_name:
             playlist_name = playlist_name.replace("remove ", "")
@@ -706,6 +705,7 @@ class Music(commands.Cog):
                 await ctx.send(f'**`{ctx.author}`**: Removed the playlist **{playlist_name}**')
             else:
                 await ctx.send(f'**`{ctx.author}`**: The playlist **{playlist_name}** does not exist!')
+		
         elif "show" in playlist_name:
             playlist_name = playlist_name.replace("show ", "")
             if playlist_name in self.playlists:
@@ -714,13 +714,19 @@ class Music(commands.Cog):
                     await ctx.send(f'**`{song[0]}`**')
             else:
                 await ctx.send(f'**`{ctx.author}`**: The playlist **{playlist_name}** does not exist!')
+		
         elif "list" in playlist_name:
             await ctx.send(f'**`{ctx.author}`**: The following playlists are available:')
             for playlist in self.playlists:
                 await ctx.send(f'**`{playlist}`**')
+		
         elif playlist_name in self.playlists:
-            player.queue.extend(self.playlists[playlist_name])
+	    list_song = self.playlists[playlist_name]
+	    for song in list_song:
+            	source = await YTDLSource.create_source(ctx, song['web_url'], loop=self.bot.loop, download=DOWNLOAD, fromloop=True, player=player)
+        	await player.queue.put(source)
             await ctx.send(f'**`{ctx.author}`**: Added `{playlist_name}` to the queue!')
+		
         elif "add" in playlist_name:
             playlist_name = playlist_name.replace("add ", "")
             if playlist_name in self.playlists:
@@ -729,7 +735,8 @@ class Music(commands.Cog):
                 """La playlist s'initalise avec les musique deja présente dans la queue"""
                 self.playlists[playlist_name] = []
                 self.playlists[playlist_name].append([vc.source.title, vc.source.web_url])
-                for song in player.queue:
+		listtitle = list(itertools.islice(player.queue._queue, 0, None))
+                for song in listtitle:
                     self.playlists[playlist_name].append([song.title, song.web_url])
                 await ctx.send(f'**`{ctx.author}`**: Created the playlist **{playlist_name}**!')
 
@@ -742,9 +749,9 @@ class Music(commands.Cog):
                 PLAYLIST[playlist] = []
                 for song in self.playlists[playlist]:
                     PLAYLIST[playlist].append([song[0], song[1]])
-            os.environ["PLAYLIST"] = PLAYLIST
+            os.environ["PLAYLIST"] = str(PLAYLIST)
         else:
-            os.environ["PLAYLIST"] = {}
+            os.environ["PLAYLIST"] = "{}"
   
 
 
