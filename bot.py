@@ -61,7 +61,7 @@ ytdlopts = {
     'default_search': 'auto',
     'netrc': True,
     #'cookiefile': 'cookies-ytdl.txt',
-    'verbose': True,
+    'verbose': False,
     'flatplaylist': True,
     'source_address': '0.0.0.0'  # ipv6 addresses cause issues sometimes
 }
@@ -424,7 +424,15 @@ class Music(commands.Cog):
 
         player = self.get_player(ctx)
         song = player.current
-        song.start_time = 0
+        temp_song=[]
+        interval=player.queue.qsize()
+        for i in range (interval):
+            temp_song.append(await player.queue.get())
+        temp_song.insert(0, song)
+        player.next.clear()
+        for i in range (interval+1):
+            await player.queue.put(temp_song[i])
+
         await ctx.send(f'**`{ctx.author}`**: The song has been reset!')
 
 
@@ -437,27 +445,7 @@ class Music(commands.Cog):
         if not vc or not vc.is_playing():
             return await ctx.send('I am not currently playing anything!')
         video_id = vc.source.web_url[32:]
-        """
-        lyrics = YouTubeTranscriptApi.get_transcript(video_id)
-        formated_lyric = ""
-        for ligne in lyrics:
-            if '[' in ligne.get('text'):
-                pass
-            elif len(formated_lyric+ligne.get('text')) >= 1024:
-            
-                embed = discord.Embed(title="Lyrics of "+vc.source.title)
-                embed.add_field(name="lyrics : ", value=formated_lyric, inline=False)
-                await ctx.send(embed=embed)
-                formated_lyric=formate_string(ligne.get('text'))
 
-            else:
-            
-                formated_lyric=formated_lyric+formate_string(ligne.get('text'))
-                
-        embed = discord.Embed(title="Lyrics of "+vc.source.title)
-        embed.add_field(name="lyrics : ", value=formated_lyric, inline=False)
-        await ctx.send(embed=embed)
-        """
         lyrics = YTDLSource.return_lyrics(ctx, vc.source)
 
         formated_lyric = ""
@@ -520,31 +508,35 @@ class Music(commands.Cog):
             temp_song.append(await player.queue.get())
         if index<=0 or index>interval:
             return await ctx.send('Uncorrect song number')
+        else:
+            source = temp_song[index-1]
+            if DOWNLOAD:
+                
+                info = ytdl.extract_info(source.web_url, download=False)
+                filename = ytdl.prepare_filename(info)
+                try:
+                    if os.path.exists(filename):
+                        os.remove(filename)
+                    else:
+                        pass
+                except Exception as E:  
+                    print(E)
+                
+            if loop:
+                try:
+                    loop_queue.remove(source['title'])
+                except Exception as E:
+                    print(E)
+                #del loop_queue[loop_queue.index(source['title'])]
 
-        source = temp_song[index-1]
-        if DOWNLOAD:
-            
-            info = ytdl.extract_info(source.web_url, download=False)
-            filename = ytdl.prepare_filename(info)
             try:
-                if os.path.exists(filename):
-                    os.remove(filename)
-                else:
-                    pass
-            except Exception as E:  
-                print(E)
+                del temp_song[index-1]
+            except Exception as E:
+                print(E) 
             
-        if loop:
-            loop_queue.pop(loop_queue.index(source))
-
-        try:
-            del temp_song[index-1]
-        except Exception as E:
-            print(E) 
-           
-        for i in temp_song:
-            await player.queue.put(i)
-        await ctx.send(f'**`{ctx.author}`**: Removed a song!')
+            for i in temp_song:
+                await player.queue.put(i)
+            await ctx.send(f'**`{ctx.author}`**: Removed a song!')
 
     @commands.command(name='resume', aliases=['unpause'])
     async def resume_(self, ctx):
