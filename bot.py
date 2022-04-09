@@ -63,7 +63,7 @@ ytdlopts = {
     #'cookiefile': 'cookies-ytdl.txt',
     'verbose': False,
     'flatplaylist': True,
-    'source_address': '0.0.0.0'  # ipv6 addresses cause issues sometimes
+    'source_address': '0.0.0.0'  # problème ipv6 des fois
 }
 
 ffmpegopts = {
@@ -122,6 +122,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
         
     @classmethod
     async def create_source(cls, ctx, search: str, *, loop, download=DOWNLOAD, fromloop, player):
+	"""Méthode principale pour récupérer la source"""
         loop = loop or asyncio.get_event_loop()
         
         to_run = partial(ytdl.extract_info, url=search, download=download)
@@ -208,14 +209,14 @@ class MusicPlayer(commands.Cog):
                         await self.queue.put(source)
 
             try:
-                # Wait for the next song. If we timeout cancel the player and disconnect...
+                # Attente de la prochaine musique avec timeout
                 async with timeout(300):  # 5 minutes...
                     source = await self.queue.get()
             except asyncio.TimeoutError:
                 return self.destroy(self._guild)
 
             if not isinstance(source, YTDLSource):
-                # Source was probably a stream (not downloaded)
+                # Source is a stream
                 # So we should regather to prevent stream expiration
                 try:
                     source = await YTDLSource.regather_stream(source, loop=self.bot.loop)
@@ -389,30 +390,6 @@ class Music(commands.Cog):
 
         vc.pause()
         await ctx.send(f'**`{ctx.author}`**: Paused the song!')
-        
-
-    """
-    @commands.command(name='reset')
-    async def reset_(self, ctx):
-        vc = ctx.voice_client
-
-        if not vc or not vc.is_playing():
-            return await ctx.send('I am not currently playing anything!')
-        
-        player = self.get_player(ctx)
-        song = player.current
-        
-        temp_song=[]
-        interval=player.queue.qsize()
-        for i in range (interval):
-            temp_song.append(await player.queue.get())
-        temp_song.insert(0, song)
-        
-        for i in range (interval+1):
-            await player.queue.put(temp_song[i])
-            
-        await ctx.send(f'**`{ctx.author}`**: The song has been reset!')
-    """
 
     @commands.command(name='reset')
     async def reset_(self, ctx):
@@ -664,7 +641,7 @@ class Music(commands.Cog):
     async def stop_(self, ctx):
         """Stop the currently playing song and destroy the player.
         !Warning!
-            This will destroy the player assigned to your guild, also deleting any queued songs and settings.
+            Cela supprimera le player associé au serveur. Toute queue sera perdue.
         """
         vc = ctx.voice_client
 
