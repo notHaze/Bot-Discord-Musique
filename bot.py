@@ -125,23 +125,26 @@ class YTDLSource(discord.PCMVolumeTransformer):
         """Méthode principale pour récupérer la source"""
         loop = loop or asyncio.get_event_loop()
         
-        to_run = partial(ytdl.extract_info, url=search, download=download)
-        data = await loop.run_in_executor(None, to_run)
+        try:
+            to_run = partial(ytdl.extract_info, url=search, download=download)
+            data = await loop.run_in_executor(None, to_run)
 
-        if 'entries' in data:
-            for index in range(0,len(data['entries'])-1):
-                await YTDLSource.playlist_entries(ctx, data['entries'][index], player)
-            data = data['entries'][len(data['entries'])-1]
+            if 'entries' in data:
+                for index in range(0,len(data['entries'])-1):
+                    await YTDLSource.playlist_entries(ctx, data['entries'][index], player)
+                data = data['entries'][len(data['entries'])-1]
 
-        if fromloop == False:
-            await ctx.send(f'```ini\n[Added {data["title"]} to the Queue.]\n```')
+            if fromloop == False:
+                await ctx.send(f'```ini\n[Added {data["title"]} to the Queue.]\n```')
 
-        if download:
-            source = ytdl.prepare_filename(data)
-        else:
-            return {'webpage_url': data['webpage_url'], 'requester': ctx.author, 'title': data['title']}
+            if download:
+                source = ytdl.prepare_filename(data)
+            else:
+                return {'webpage_url': data['webpage_url'], 'requester': ctx.author, 'title': data['title']}
 
-        return cls(discord.FFmpegPCMAudio(source), data=data, requester=ctx.author)
+            return cls(discord.FFmpegPCMAudio(source), data=data, requester=ctx.author)
+        except:
+            print("Spotify ",search)
 
 
     @classmethod
