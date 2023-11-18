@@ -15,9 +15,11 @@ from ytmusicapi import YTMusic
 import yt_dlp
 import ast
 
-load_dotenv('.env')
 
+load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
+
+load_dotenv('.env')
 GUILD = os.getenv('DISCORD_GUILD')
 PREFIX = os.getenv('PREFIX')
 DOWNLOAD = os.getenv('DOWNLOAD')
